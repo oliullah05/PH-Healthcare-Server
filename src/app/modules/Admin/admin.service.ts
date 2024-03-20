@@ -51,10 +51,21 @@ const getAllAdmin = async (params: Record<string, any>, options: any) => {
         orderBy: sortBy && sortOrder ? {
             [sortBy]: sortOrder
         } : {
-            createdAt:"desc"
+            createdAt: "desc"
         }
     })
-    return result
+
+    const total = await prisma.admin.count({
+        where:whereConditions
+    })
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data:result
+    }
 }
 
 
