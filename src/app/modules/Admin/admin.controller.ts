@@ -10,7 +10,7 @@ import { adminFilterableFields } from "./admin.const";
 
 const getAllAdmin = async (req: Request, res: Response) => {
  const filters = pick(req.query,adminFilterableFields);
- const options = pick(req.query,['page',"limit"]);
+ const options = pick(req.query,['page',"limit","sortBy","sortOrder"]);
     try {
         const result = await adminServices.getAllAdmin(filters,options);
         res.status(200).json({
