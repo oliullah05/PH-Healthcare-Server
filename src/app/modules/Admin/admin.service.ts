@@ -1,36 +1,14 @@
 import { Prisma, PrismaClient } from "@prisma/client"
 import { adminSearchAbleFields } from "./admin.const";
-import { skip } from "node:test";
-import { link } from "node:fs";
-
-const prisma = new PrismaClient();
-
-const calculatePagination = (options: {
-    page: number,
-    limit: number,
-    sortOrder: string,
-    sortBy: string
-}) => {
-    const page: number = Number(options.page) || 1;
-    const limit: number = Number(options.limit) || 10;
-    const skip: number = (Number(page) - 1) * limit;
-    const sortBy: string = options.sortBy || 'createdAt';
-    const sortOrder: string = options.sortOrder || 'desc';
-    return {
-        page,
-        limit,
-        skip,
-        sortBy,
-        sortOrder
-    }
-}
+import { paginationHelper } from "../../../hepers/paginationHelpers";
+import prisma from "../../../shared/prisma";
 
 
 
 
 const getAllAdmin = async (params: Record<string, any>, options: any) => {
     const { searchTerm, ...filterData } = params;
-    const { limit, page, sortBy, sortOrder, skip } = calculatePagination(options)
+    const { limit, page, sortBy, sortOrder, skip } = paginationHelper.calculatePagination(options)
     const andConditions: Prisma.AdminWhereInput[] = [];
 
     console.log({ options });
@@ -73,7 +51,7 @@ const getAllAdmin = async (params: Record<string, any>, options: any) => {
         orderBy: sortBy && sortOrder ? {
             [sortBy]: sortOrder
         } : {
-            createdAt
+            createdAt:"desc"
         }
     })
     return result
