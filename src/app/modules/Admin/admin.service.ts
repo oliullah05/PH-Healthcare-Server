@@ -37,11 +37,6 @@ const getAllAdmin = async (params: Record<string, any>, options: any) => {
     }
 
 
-
-
-
-
-
     const whereConditions: Prisma.AdminWhereInput = { AND: andConditions }
     // console.dir(andConditions,{depth:"infinity"});
     const result = await prisma.admin.findMany({
@@ -70,6 +65,18 @@ const getAllAdmin = async (params: Record<string, any>, options: any) => {
 
 
 
+
+const getSingleAdminById = async(id:string)=>{
+    const result = await prisma.admin.findUnique({
+        where:{
+            id
+        }
+    })
+    return result
+}
+
+
 export const adminServices = {
-    getAllAdmin
+    getAllAdmin,
+    getSingleAdminById
 }
