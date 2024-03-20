@@ -51,7 +51,7 @@ const getAllAdmin = async (params: Record<string, any>, options: any) => {
     })
 
     const total = await prisma.admin.count({
-        where:whereConditions
+        where: whereConditions
     })
     return {
         meta: {
@@ -59,36 +59,65 @@ const getAllAdmin = async (params: Record<string, any>, options: any) => {
             limit,
             total
         },
-        data:result
+        data: result
     }
 }
 
 
 
 
-const getSingleAdminById = async(id:string)=>{
+const getSingleAdminById = async (id: string) => {
     const result = await prisma.admin.findUnique({
-        where:{
+        where: {
             id
         }
     })
     return result
 }
 
-const updateSingleAdmin = async(id:string,updatedData:Partial<Admin>)=>{
+const updateSingleAdmin = async (id: string, updatedData: Partial<Admin>) => {
+    await prisma.admin.findUniqueOrThrow({
+        where: {
+            id
+        }
+    })
+
     const result = await prisma.admin.update({
-        where:{
+        where: {
             id
         },
-        data:updatedData
+        data: updatedData
+    })
+    return result
+}
+
+
+const deleteSingleAdmin = async (id: string) => {
+    const result = await prisma.$transaction(async (transactionClient) => {
+        const adminDeletedData = await transactionClient.admin.delete({
+            where: {
+                id
+            }
+        })
+
+        const userDeletedData = await transactionClient.user.delete({
+            where: {
+                email:adminDeletedData.email
+            }
+        })
+
+        return adminDeletedData
+
     })
     return result
 }
 
 
 
+
 export const adminServices = {
     getAllAdmin,
     getSingleAdminById,
-    updateSingleAdmin
+    updateSingleAdmin,
+    deleteSingleAdmin
 }
