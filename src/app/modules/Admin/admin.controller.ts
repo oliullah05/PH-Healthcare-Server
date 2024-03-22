@@ -3,6 +3,7 @@ import { adminServices } from "./admin.service";
 import  pick  from "../../../shared/pick";
 import { adminFilterableFields } from "./admin.const";
 import sendResponse from "../../../shared/sendResponse";
+import httpStatus from "http-status";
 
 
 
@@ -46,7 +47,7 @@ const getSingleAdminById = async (req: Request, res: Response) => {
             success: true,
             message: "Admin is retrieve successfully",
             data: result,
-            statusCode:200
+            statusCode:httpStatus.OK
         })
        }
        catch (err:any) {
@@ -71,7 +72,7 @@ const getSingleAdminById = async (req: Request, res: Response) => {
             success: true,
             message: "Admin is updated successfully",
             data: result,
-            statusCode:200
+            statusCode:httpStatus.OK
         })
        }
        catch (err:any) {
@@ -93,7 +94,7 @@ const getSingleAdminById = async (req: Request, res: Response) => {
             success: true,
             message: "Admin is deleted successfully",
             data: result,
-            statusCode:200
+            statusCode:httpStatus.OK
         })
        }
        catch (err:any) {
@@ -119,7 +120,7 @@ const getSingleAdminById = async (req: Request, res: Response) => {
             success: true,
             message: "Admin is deleted successfully",
             data: result,
-            statusCode:200
+            statusCode:httpStatus.OK
         })
        }
        catch (err:any) {
