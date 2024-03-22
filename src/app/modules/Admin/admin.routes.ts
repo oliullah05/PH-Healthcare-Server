@@ -1,32 +1,15 @@
-import express, { NextFunction, Request, Response } from "express"
+import express from "express"
 import { adminControllers } from "./admin.controller";
-import { AnyZodObject, z } from "zod";
+
+import validateRequest from "../../middlewars/validateRequest";
+import { adminValidationsSchemas } from "./admin.validation";
 
 const router = express.Router();
 
 
-const update = z.object({
-    body:z.object({
-        name:z.string().optional(),
-        contactNumber:z.string().optional()
-
-    })
-})
 
 
-const validateRequest = (schema:AnyZodObject)=>{
- return  async (req:Request,res:Response,next:NextFunction)=>{
-    try{
-        await schema.parseAsync({
-            body:req.body
-        })
-      return  next()
-    }
-    catch(err){
-        next(err)
-    }
-    }
-}
+
 
 
 
@@ -34,7 +17,7 @@ const validateRequest = (schema:AnyZodObject)=>{
 
 router.get("/",adminControllers.getAllAdmin)
 router.get("/:id",adminControllers.getSingleAdminById)
-router.patch("/:id",validateRequest(update),adminControllers.updateSingleAdmin)
+router.patch("/:id",validateRequest(adminValidationsSchemas.updateAdmin),adminControllers.updateSingleAdmin)
 router.delete("/:id",adminControllers.deleteSingleAdmin)
 router.delete("/soft/:id",adminControllers.softDeleteSingleAdmin)
 
