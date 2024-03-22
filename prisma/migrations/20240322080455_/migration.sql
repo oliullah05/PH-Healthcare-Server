@@ -2,7 +2,7 @@
 CREATE TYPE "UserRole" AS ENUM ('SUPER_ADMIN', 'ADMIN', 'DOCTOR', 'PATIENT');
 
 -- CreateEnum
-CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'BLOCKED');
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'BLOCKED', 'DELETED');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -25,7 +25,7 @@ CREATE TABLE "admins" (
     "email" TEXT NOT NULL,
     "profilePhoto" TEXT,
     "contactNumber" TEXT NOT NULL,
-    "isDeleted" BOOLEAN DEFAULT false,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

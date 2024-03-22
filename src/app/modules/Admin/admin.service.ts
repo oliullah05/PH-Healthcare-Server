@@ -1,4 +1,4 @@
-import { Admin, Prisma, PrismaClient } from "@prisma/client"
+import { Admin, Prisma, PrismaClient, UserStatus } from "@prisma/client"
 import { adminSearchAbleFields } from "./admin.const";
 import { paginationHelper } from "../../../hepers/paginationHelpers";
 import prisma from "../../../shared/prisma";
@@ -93,6 +93,13 @@ const updateSingleAdmin = async (id: string, updatedData: Partial<Admin>) => {
 
 
 const deleteSingleAdmin = async (id: string) => {
+
+    await prisma.admin.findUniqueOrThrow({
+        where: {
+            id
+        }
+    })
+
     const result = await prisma.$transaction(async (transactionClient) => {
         const adminDeletedData = await transactionClient.admin.delete({
             where: {
@@ -102,7 +109,7 @@ const deleteSingleAdmin = async (id: string) => {
 
         const userDeletedData = await transactionClient.user.delete({
             where: {
-                email:adminDeletedData.email
+                email: adminDeletedData.email
             }
         })
 
@@ -115,9 +122,45 @@ const deleteSingleAdmin = async (id: string) => {
 
 
 
+const softDeleteSingleAdmin = async (id: string) => {
+
+    await prisma.admin.findUniqueOrThrow({
+        where: {
+            id
+        }
+    })
+
+    const result = await prisma.$transaction(async (transactionClient) => {
+        const adminDeletedData = await transactionClient.admin.update({
+            where: {
+                id
+            },
+            data:{
+                isDeleted:true
+            }
+        })
+
+        const userDeletedData = await transactionClient.user.update({
+            where: {
+                email: adminDeletedData.email
+            },
+            data:{
+                status:UserStatus.DELETED
+            }
+        })
+
+        return adminDeletedData
+
+    })
+    return result
+}
+
+
+
 export const adminServices = {
     getAllAdmin,
     getSingleAdminById,
     updateSingleAdmin,
-    deleteSingleAdmin
+    deleteSingleAdmin,
+    softDeleteSingleAdmin
 }
