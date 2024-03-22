@@ -1,8 +1,10 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors"
 import { userRoutes } from "./app/modules/User/user.routes";
 import { adminRoutes } from "./app/modules/Admin/admin.routes";
 import router from "./app/routes";
+import httpStatus from "http-status";
+import globalErrorHandler from "./app/middlewars/globalErrorHandler";
 
 const app: Application = express();
 
@@ -12,7 +14,7 @@ app.use(cors())
 
 // parser
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 
 app.get("/", (req: Request, res: Response) => {
     res.send({
@@ -20,13 +22,13 @@ app.get("/", (req: Request, res: Response) => {
     })
 })
 
-app.use("/api/v1",router)
+app.use("/api/v1", router)
+
+app.use(globalErrorHandler)
 
 
 
-
-
-app.get("*",(req: Request, res: Response) => {
+app.get("*", (req: Request, res: Response) => {
     res.send({
         message: "Api Not Found"
     })
