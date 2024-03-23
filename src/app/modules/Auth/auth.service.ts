@@ -10,34 +10,28 @@ const loginUser = async (payload: { email: string, password: string }) => {
     })
 
     const isCorrectPassword: boolean = await bcrypt.compare(payload.password, userData.password);
-if(!isCorrectPassword){
-    throw new Error("Password incorrect")
-}
+    if (!isCorrectPassword) {
+        throw new Error("Password incorrect")
+    }
+    const jwtPayload = { email: userData.email, role: userData.role }
+    const accessToken = jwtHelpers.genarateToken(jwtPayload, "djhf", "5m")
 
-const jwtPayload = { email: userData.email, role: userData.role }
-
-    const accessToken = jwtHelpers.genarateToken(jwtPayload,"djhf","5m")
-
-    // refresh token
-
-
-const refreshToken = jwtHelpers.genarateToken(jwtPayload,"dghgfhjhf","30d")
-
-
-
+    const refreshToken = jwtHelpers.genarateToken(jwtPayload, "dghgfhjhf", "30d")
     return {
-
         accessToken,
         refreshToken,
-        needPasswordChange:userData.needPasswordChange
-
+        needPasswordChange: userData.needPasswordChange
     }
-
-
 
 }
 
 
+
+const refreshToken = async(token:string)=>{
+    console.log("refresh token",{token});
+}
+
 export const AuthServices = {
-    loginUser
+    loginUser,
+    refreshToken
 }
