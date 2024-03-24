@@ -28,13 +28,9 @@ const refreshToken = catchAsync(async(req,res)=>{
 
    sendResponse(res,{
     statusCode:httpStatus.OK,
-    message:"Logged in successfully",
+    message:"Access token generated successfully",
     success:true,
     data:result
-    // data:{
-    //     accessToken:result.accessToken,
-    //     needPasswordChange:result.needPasswordChange
-    // }
    })
 })
 const changePassword = catchAsync(async(req,res)=>{

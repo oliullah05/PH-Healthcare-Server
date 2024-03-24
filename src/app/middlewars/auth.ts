@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { jwtHelpers } from "../../hepers/jwtHelpers";
 import config from "../../config";
-import ApiError from "../errors/apiErrors";
+
 import httpStatus from "http-status";
+import ApiError from "../errors/ApiErrors";
 
 
 const auth = (...roles: string[]) => {
