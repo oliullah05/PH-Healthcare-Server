@@ -1,10 +1,9 @@
 import { UserStatus } from "@prisma/client";
-import { jwtHelpers } from "../../../hepers/jwtHelpers";
-import prisma from "../../../shared/prisma"
-import bcrypt from "bcrypt"
-import jwt, { JwtPayload } from "jsonwebtoken"
+import bcrypt from "bcrypt";
+import { JwtPayload } from "jsonwebtoken";
 import config from "../../../config";
-import { strict } from "assert";
+import { jwtHelpers } from "../../../hepers/jwtHelpers";
+import prisma from "../../../shared/prisma";
 const loginUser = async (payload: { email: string, password: string }) => {
     const userData = await prisma.user.findUniqueOrThrow({
         where: {
@@ -62,9 +61,22 @@ const refreshToken = async(refreshToken:string)=>{
 
 
 
+const changePassword = async(user,payload)=>{
+const {email}=user;
+
+const userData = await prisma.user.findUniqueOrThrow({
+    where:{
+        email
+    }
+})
+}
+
+
+
 
 
 export const AuthServices = {
     loginUser,
-    refreshToken
+    refreshToken,
+    changePassword
 }
