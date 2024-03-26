@@ -105,7 +105,20 @@ const userData =await prisma.user.findUniqueOrThrow({
 })
 
 const resetPasswordToken = jwtHelpers.genarateToken({email:userData.email,role:userData.role},config.jwt.reset_password_token as string ,config.jwt.reset_password_token_expaire_in as string)
-return resetPasswordToken
+
+
+
+// http://localhost:5173/reset-password?email="jkasxdsH"&token=AJhdfshfh
+
+const resetPasswordLink = `${config.reset_password_front_end_link}?id=${userData.id}&token=${resetPasswordToken}`
+
+
+
+
+
+
+
+return resetPasswordLink
 }
 
 
