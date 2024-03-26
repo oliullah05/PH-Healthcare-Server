@@ -1,6 +1,6 @@
 import { UserStatus } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { JwtPayload } from "jsonwebtoken";
+import { JwtPayload, Secret } from "jsonwebtoken";
 import config from "../../../config";
 import { jwtHelpers } from "../../../hepers/jwtHelpers";
 import prisma from "../../../shared/prisma";
@@ -61,7 +61,7 @@ const refreshToken = async(refreshToken:string)=>{
 
 
 
-const changePassword = async(user,payload:{newPassword:string,oldPassword:string})=>{
+const changePassword = async(user:any,payload:{newPassword:string,oldPassword:string})=>{
 const {email}=user;
 
 const userData = await prisma.user.findUniqueOrThrow({
@@ -96,9 +96,24 @@ return {
 
 
 
+const forgotPassword = async(payload:{email:string})=>{
+const userData =await prisma.user.findUniqueOrThrow({
+    where:{
+        email:payload.email,
+        status:UserStatus.ACTIVE
+    }
+})
+
+const resetPasswordToken = jwtHelpers.genarateToken({email:userData.email,role:userData.role},config.jwt.reset_password_token as string ,config.jwt.reset_password_token_expaire_in as string)
+return resetPasswordToken
+}
+
+
+
 
 export const AuthServices = {
     loginUser,
     refreshToken,
-    changePassword
+    changePassword,
+    forgotPassword
 }
