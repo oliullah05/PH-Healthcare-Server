@@ -10,6 +10,7 @@ const emailSender = async(email:string,html:string)=>{
       user: config.emailSender.nodemailer_email,
       pass: config.emailSender.nodemailer_app_password,
     },
+    tls: {rejectUnauthorized: false},
   });
   
  
@@ -21,7 +22,7 @@ const emailSender = async(email:string,html:string)=>{
     //   text: "Hello world?", // plain text body
       html, // html body
     });
-  
+    
     console.log("Message sent: %s", info.messageId);
 
 }
