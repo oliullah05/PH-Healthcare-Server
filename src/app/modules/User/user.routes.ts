@@ -15,13 +15,15 @@ router.post("/create-admin", auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     next()
   }, userController.createAdmin
 )
+
+
 router.post("/create-doctor", auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   fileUploader.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
-    req.body = userValidation.createAdmin.parse(JSON.parse(req.body.data))
+    req.body = userValidation.createDoctor.parse(JSON.parse(req.body.data))
    
     next()
-  }, userController.createAdmin
+  }, userController.createDoctor
 )
 
 export const userRoutes = router;

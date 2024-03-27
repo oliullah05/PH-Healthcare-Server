@@ -3,25 +3,28 @@ import { userService } from "./user.service";
 
 const createAdmin = async(req:Request,res:Response)=>{
 
-
- try{
         const result = await userService.createAdmin(req);
         res.status(200).json({
             success:true,
-            message:"admin created successfully",
+            message:"Admin created successfully",
             data:result
         })
-    }
+    
+}
 
-    catch(err:any){
-       res.status(500).json({
-        success:false,
-        message:err.name  || "Something went wrong",
-        error:err
-       })
-    }
+
+const createDoctor = async(req:Request,res:Response)=>{
+    console.log({file:req.file,body:req.body.data});
+        const result = await userService.createDoctor(req);
+        res.status(200).json({
+            success:true,
+            message:"Doctor created successfully",
+            data:result
+        })
+    
 }
 
 export const userController = {
-    createAdmin
+    createAdmin,
+    createDoctor
 }

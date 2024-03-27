@@ -19,17 +19,16 @@ const upload = multer({ storage: storage });
 
 
 
-// flsdmkfmsdlf
+// ------------------------
 cloudinary.config({
     cloud_name: 'ddbkkucbm',
     api_key: '213212774316986',
     api_secret: '9_Q4a16YUsDjML3zoZwB5ACQBmA'
   });
 
-
-
+  
 const uploadToClodinary = async(file:IFile):Promise<ICloudinaryResponse |undefined>=>{
-    console.log({file},88887777);
+    // console.log({file},88887777);
 return new Promise((resolve,reject)=>{
   cloudinary.uploader.upload(
     // "D:\\Level-2\\FullStackPath\\Module-25-healthcare-server\\uploads\\logo.jpg",
