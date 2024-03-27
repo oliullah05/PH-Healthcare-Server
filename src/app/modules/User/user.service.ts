@@ -177,19 +177,22 @@ console.log(andConditions);
 
 
 
+const changeProfileStatus = async(id:string,data:UserRole)=>{
+const userData = await prisma.user.findUniqueOrThrow({
+    where:{
+        id
+    }
+})
 
+const updateUserStatus = await prisma.user.update({
+    where:{
+        id
+    },
+    data
+})
 
-
-
-
-
-
-
-
-
-
-
-
+return updateUserStatus
+}
 
 
 
@@ -199,5 +202,6 @@ console.log(andConditions);
 export const userService = {
     createAdmin,
     createDoctor,
-    getAllUser
+    getAllUser,
+    changeProfileStatus
 }

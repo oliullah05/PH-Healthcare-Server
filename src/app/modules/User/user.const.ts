@@ -1,2 +1,2 @@
 export const userSearchableFields:string[] = ["email"];
-export const userFilterableFields:string[] = ["email","role","status","needPasswordChange"];
+export const userFilterableFields:string[] = ["email","role","status","needPasswordChange","searchTerm"];

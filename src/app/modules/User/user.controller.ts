@@ -4,6 +4,7 @@ import catchAsync from "../../../shared/catchAsync";
 import pick from "../../../shared/pick";
 import { userFilterableFields } from "./user.const";
 import sendResponse from "../../../shared/sendResponse";
+import httpStatus from "http-status";
 
 const createAdmin = async(req:Request,res:Response)=>{
 
@@ -42,6 +43,19 @@ const getAllUser = catchAsync(async (req, res) => {
     })
 
 })
+const changeProfileStatus = catchAsync(async (req, res) => {
+const {id} = req.params;
+
+    const result = await userService.changeProfileStatus(id,req.body);
+    sendResponse(res, {
+        success: true,
+        message: "User profile status change",
+        statusCode: httpStatus.OK,
+        // meta: result.meta,
+        data: result
+    })
+
+})
 
 
 
@@ -49,4 +63,7 @@ const getAllUser = catchAsync(async (req, res) => {
 export const userController = {
     createAdmin,
     createDoctor,
-    getAllUser}
+    changeProfileStatus,
+    getAllUser
+
+}
