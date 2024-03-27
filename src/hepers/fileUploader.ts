@@ -1,6 +1,7 @@
 import multer from "multer"
-import path from "path"
+import path, { resolve } from "path"
 import { v2 as cloudinary } from 'cloudinary';
+import { rejects } from "assert";
 
 
 const storage = multer.diskStorage({
@@ -19,21 +20,32 @@ const upload = multer({ storage: storage });
 
 
 // flsdmkfmsdlf
-
-
-
-
-const uploadToClodinary = async(file:any)=>{
-    
 cloudinary.config({
     cloud_name: 'ddbkkucbm',
     api_key: '213212774316986',
     api_secret: '9_Q4a16YUsDjML3zoZwB5ACQBmA'
   });
+
+
+
+const uploadToClodinary = async(file:any)=>{
+    // console.log({file},8888);
+return new Promise((resolve,reject)=>{
+  cloudinary.uploader.upload(
+    // "D:\\Level-2\\FullStackPath\\Module-25-healthcare-server\\uploads\\logo.jpg",
+file.path,
+    { public_id: file.originalname},
+    (error, result) =>{
+  if(error){
+    reject(error)
+  }
+  else{
+    resolve(result)
+  }
+    });
+})
   
-  cloudinary.uploader.upload("D:\\Level-2\\FullStackPath\\Module-25-healthcare-server\\uploads\\logo.jpg",
-    { public_id: "olympic_flag" },
-    function (error, result) { console.log({ error, result }, 55); });
+
 }
 
 
