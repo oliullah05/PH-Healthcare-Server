@@ -1,8 +1,7 @@
-import multer from "multer"
-import path, { resolve } from "path"
 import { v2 as cloudinary } from 'cloudinary';
-import { rejects } from "assert";
-
+import multer from "multer";
+import path from "path";
+import fs from "fs"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -36,6 +35,7 @@ return new Promise((resolve,reject)=>{
 file.path,
     { public_id: file.originalname},
     (error, result) =>{
+        fs.unlinkSync(file.path)
   if(error){
     reject(error)
   }
