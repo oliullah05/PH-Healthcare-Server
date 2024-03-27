@@ -2,6 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import multer from "multer";
 import path from "path";
 import fs from "fs"
+import { ICloudinaryResponse, IFile } from '../app/interface/file';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -27,14 +28,14 @@ cloudinary.config({
 
 
 
-const uploadToClodinary = async(file:any)=>{
-    // console.log({file},8888);
+const uploadToClodinary = async(file:IFile):Promise<ICloudinaryResponse |undefined>=>{
+    console.log({file},88887777);
 return new Promise((resolve,reject)=>{
   cloudinary.uploader.upload(
     // "D:\\Level-2\\FullStackPath\\Module-25-healthcare-server\\uploads\\logo.jpg",
 file.path,
-    { public_id: file.originalname},
-    (error, result) =>{
+    // { public_id: file.originalname},
+    (error:Error, result:ICloudinaryResponse) =>{
         fs.unlinkSync(file.path)
   if(error){
     reject(error)

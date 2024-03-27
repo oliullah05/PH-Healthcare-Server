@@ -3,17 +3,18 @@ import bcrypt from "bcrypt"
 import prisma from "../../../shared/prisma";
 import { Request } from "express";
 import { fileUploader } from "../../../hepers/fileUploader";
+import { IFile } from "../../interface/file";
 
 const createAdmin = async (req: Request) => {
     // console.log({file:req.file,body:req.body.data});
 const data = req.body
-const file = req.file;
+const file:IFile |undefined = req.file;
 // console.log(req.body,"photo");
 if(file){
-    const uploadToClodinary:any = await fileUploader.uploadToClodinary(file)
-    // console.log({uploadToClodinary});
+    const uploadToClodinary= await fileUploader.uploadToClodinary(file)
+    console.log({uploadToClodinary});
     req.body.admin.profilePhoto =uploadToClodinary?.secure_url;
-    console.log(req.body,"photo");
+    // console.log(req.body,"photo");
 }
 
 
@@ -28,9 +29,7 @@ if(file){
     const result = await prisma.$transaction(async (transactionClient) => {
 
       
-        
-          
-
+    
         // create user
         await transactionClient.user.create({
             data: userData
