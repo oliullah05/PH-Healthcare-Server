@@ -14,7 +14,7 @@ const getAllAdmin = async (params: IAdminFilterRequest, options:IPaginationOptio
     const { limit, page, sortBy, sortOrder, skip } = paginationHelper.calculatePagination(options)
     const andConditions: Prisma.AdminWhereInput[] = [];
 
-
+console.log(searchTerm);
     if (params.searchTerm) {
         andConditions.push({
             OR: adminSearchAbleFields.map(field => ({

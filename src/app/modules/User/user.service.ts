@@ -102,17 +102,18 @@ if(file){
 
 
 const getAllUser = async (params:any, options:IPaginationOptions) => {
-
+ 
     const { searchTerm, ...filterData } = params;
+ 
     const { limit, page, sortBy, sortOrder, skip } = paginationHelper.calculatePagination(options)
     const andConditions: Prisma.UserWhereInput[] = [];
 
 
-    if (params.searchTerm) {
+    if (searchTerm) {
         andConditions.push({
             OR: userSearchableFields.map(field => ({
                 [field]: {
-                    contains: params.searchTerm,
+                    contains:searchTerm,
                     mode: "insensitive"
                 }
             }))
@@ -136,7 +137,7 @@ const getAllUser = async (params:any, options:IPaginationOptions) => {
     // andConditions.push({
     //     isDeleted:false
     // })
-
+console.log(andConditions);
     const whereConditions: Prisma.UserWhereInput = { AND: andConditions }
     // console.dir(andConditions,{depth:"infinity"});
     const result = await prisma.user.findMany({
@@ -147,6 +148,17 @@ const getAllUser = async (params:any, options:IPaginationOptions) => {
             [sortBy]: sortOrder
         } : {
             createdAt: "desc"
+        },
+        select:{
+           id:true,
+           email:true,
+           needPasswordChange:true,
+           status:true,
+           role:true,
+           createdAt:true,
+           updatedAt:true,
+           admin:true,
+           Doctor:true
         }
     })
 
