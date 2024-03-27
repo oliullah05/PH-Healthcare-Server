@@ -1,9 +1,12 @@
-import { PrismaClient, UserRole } from "@prisma/client"
+import { Prisma, PrismaClient, UserRole } from "@prisma/client"
 import bcrypt from "bcrypt"
 import prisma from "../../../shared/prisma";
 import { Request } from "express";
 import { fileUploader } from "../../../hepers/fileUploader";
 import { IFile } from "../../interface/file";
+import { IPaginationOptions } from "../../interface/pagination";
+import { paginationHelper } from "../../../hepers/paginationHelpers";
+import { userSearchableFields } from "./user.const";
 
 const createAdmin = async (req: Request) => {
     // console.log({file:req.file,body:req.body.data});
@@ -95,7 +98,94 @@ if(file){
 
 
 
+
+
+
+const getAllUser = async (params:any, options:IPaginationOptions) => {
+
+    const { searchTerm, ...filterData } = params;
+    const { limit, page, sortBy, sortOrder, skip } = paginationHelper.calculatePagination(options)
+    const andConditions: Prisma.UserWhereInput[] = [];
+
+
+    if (params.searchTerm) {
+        andConditions.push({
+            OR: userSearchableFields.map(field => ({
+                [field]: {
+                    contains: params.searchTerm,
+                    mode: "insensitive"
+                }
+            }))
+        })
+    }
+
+
+    if (Object.keys(filterData).length > 0) {
+        andConditions.push({
+            AND: Object.keys(filterData).map(key => ({
+                [key]: {
+                    equals: (filterData as any)[key]
+                }
+            }))
+        })
+    }
+
+
+
+
+    // andConditions.push({
+    //     isDeleted:false
+    // })
+
+    const whereConditions: Prisma.UserWhereInput = { AND: andConditions }
+    // console.dir(andConditions,{depth:"infinity"});
+    const result = await prisma.user.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: sortBy && sortOrder ? {
+            [sortBy]: sortOrder
+        } : {
+            createdAt: "desc"
+        }
+    })
+
+    const total = await prisma.user.count({
+        where: whereConditions
+    })
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: result
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const userService = {
     createAdmin,
-    createDoctor
+    createDoctor,
+    getAllUser
 }

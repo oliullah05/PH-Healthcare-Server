@@ -7,7 +7,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 
 
-const getAllAdmin: RequestHandler = catchAsync(async (req, res) => {
+const getAllAdmin = catchAsync(async (req, res) => {
 
     const filters = pick(req.query, adminFilterableFields);
     const options = pick(req.query, ['page', "limit", "sortBy", "sortOrder"]);
@@ -24,7 +24,7 @@ const getAllAdmin: RequestHandler = catchAsync(async (req, res) => {
 
 
 
-const getSingleAdminById: RequestHandler = catchAsync(async (req, res) => {
+const getSingleAdminById = catchAsync(async (req, res) => {
     const id = req.params.id
     const result = await adminServices.getSingleAdminById(id)
     sendResponse(res, {
@@ -39,7 +39,7 @@ const getSingleAdminById: RequestHandler = catchAsync(async (req, res) => {
 
 
 
-const updateSingleAdmin: RequestHandler = catchAsync(async (req, res) => {
+const updateSingleAdmin = catchAsync(async (req, res) => {
     const id = req.params.id;
     const updatedData = req.body;
     const result = await adminServices.updateSingleAdmin(id, updatedData)
@@ -53,7 +53,7 @@ const updateSingleAdmin: RequestHandler = catchAsync(async (req, res) => {
 })
 
 
-const deleteSingleAdmin: RequestHandler = catchAsync(async (req, res) => {
+const deleteSingleAdmin = catchAsync(async (req, res) => {
     const id = req.params.id;
     const result = await adminServices.deleteSingleAdmin(id)
     sendResponse(res, {
@@ -67,7 +67,7 @@ const deleteSingleAdmin: RequestHandler = catchAsync(async (req, res) => {
 
 
 
-const softDeleteSingleAdmin: RequestHandler = catchAsync(async (req, res) => {
+const softDeleteSingleAdmin = catchAsync(async (req, res) => {
     const id = req.params.id;
 
     const result = await adminServices.softDeleteSingleAdmin(id)
