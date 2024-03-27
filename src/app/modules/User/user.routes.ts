@@ -10,10 +10,9 @@ const router = express.Router();
 
 
 
-
 router.post("/", auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-   fileUploader.upload.single("file"),
-    userController.createAdmin
+  fileUploader.upload.single("file"),
+  userController.createAdmin
 )
 
 export const userRoutes = router;
