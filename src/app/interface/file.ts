@@ -22,6 +22,7 @@ export type ICloudinaryResponse = {
     api_key: string
   }
 
+  
   export type IFile = {
     fieldname: string
     originalname:string
