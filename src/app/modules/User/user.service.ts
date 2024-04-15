@@ -184,7 +184,7 @@ return updateUserStatus
 }
 
 
-const getMyProfile = async(user:any)=>{
+const getMyProfile = async(user:JwtPayload)=>{
 const userData = await prisma.user.findUniqueOrThrow({
     where:{
         email:user.email,
@@ -242,7 +242,10 @@ return  {...userData,...profileInfo};
 
 
 
-const updateMyProfile = async(user:JwtPayload,payload:any)=>{
+const updateMyProfile = async(user:JwtPayload,req:Request)=>{
+   const updatedDate = req.body;
+
+
     const userData = await prisma.user.findUniqueOrThrow({
         where:{
             email:user.email,
@@ -250,6 +253,15 @@ const updateMyProfile = async(user:JwtPayload,payload:any)=>{
         }
     })
     
+
+const file = req.file as IFile
+if(file){
+    const uploadToClodinary = await fileUploader.uploadToClodinary(file);
+    req.body.profilePhoto = uploadToClodinary?.secure_url;
+}
+
+
+
     let profileInfo;
     
     if(userData.role===UserRole.SUPER_ADMIN){
@@ -257,7 +269,7 @@ const updateMyProfile = async(user:JwtPayload,payload:any)=>{
             where:{
                 email:userData.email
             },
-            data:payload
+            data:updatedDate
         })
     }
     
@@ -266,7 +278,7 @@ const updateMyProfile = async(user:JwtPayload,payload:any)=>{
             where:{
                 email:userData.email
             },
-            data:payload
+            data:updatedDate
         })
     }
     
@@ -276,7 +288,7 @@ const updateMyProfile = async(user:JwtPayload,payload:any)=>{
             where:{
                 email:userData.email
             },
-            data:payload
+            data:updatedDate
         })
     }
     
