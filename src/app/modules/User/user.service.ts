@@ -7,6 +7,7 @@ import { IFile } from "../../interface/file";
 import { IPaginationOptions } from "../../interface/pagination";
 import { paginationHelper } from "../../../hepers/paginationHelpers";
 import { userSearchableFields } from "./user.const";
+import { JwtHeader } from "jsonwebtoken";
 
 const createAdmin = async (req: Request) => {
     // console.log({file:req.file,body:req.body.data});
@@ -20,8 +21,6 @@ if(file){
     // console.log(req.body,"photo");
 }
 
-
-
     const hashedPassword = await bcrypt.hash(data.password, 12);
     const userData = {
         email: data.admin.email,
@@ -31,8 +30,6 @@ if(file){
 
     const result = await prisma.$transaction(async (transactionClient) => {
 
-      
-    
         // create user
         await transactionClient.user.create({
             data: userData
@@ -94,12 +91,6 @@ if(file){
 
     return result;
 }
-
-
-
-
-
-
 
 const getAllUser = async (params:any, options:IPaginationOptions) => {
  
@@ -175,10 +166,8 @@ console.log(andConditions);
     }
 }
 
-
-
 const changeProfileStatus = async(id:string,data:UserRole)=>{
-const userData = await prisma.user.findUniqueOrThrow({
+ await prisma.user.findUniqueOrThrow({
     where:{
         id
     }
@@ -195,7 +184,63 @@ return updateUserStatus
 }
 
 
+const getMyProfile = async(user:any)=>{
+const userData = await prisma.user.findUniqueOrThrow({
+    where:{
+        email:user.email
+    },
+    select:{
+        id:true,
+        email:true,
+        status:true,
+        role:true,
+        needPasswordChange:true,
+        password:false,
+    }
+})
 
+let profileInfo;
+
+if(userData.role===UserRole.SUPER_ADMIN){
+    profileInfo = await prisma.admin.findUnique({
+        where:{
+            email:userData.email
+        }
+    })
+}
+
+else if(userData.role===UserRole.ADMIN){
+    profileInfo = await prisma.admin.findUnique({
+        where:{
+            email:userData.email
+        }
+    })
+}
+
+
+else if(userData.role===UserRole.DOCTOR){
+    profileInfo = await prisma.doctor.findUnique({
+        where:{
+            email:userData.email
+        }
+    })
+}
+
+else if(userData.role===UserRole.PATIENT){
+    profileInfo = await prisma.user.findUnique({
+        where:{
+            email:userData.email
+        }
+    })
+}
+
+
+
+
+
+
+return  {...userData,...profileInfo};
+}
 
 
 
@@ -203,5 +248,6 @@ export const userService = {
     createAdmin,
     createDoctor,
     getAllUser,
-    changeProfileStatus
+    changeProfileStatus,
+    getMyProfile
 }
