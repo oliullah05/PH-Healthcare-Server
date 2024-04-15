@@ -5,6 +5,7 @@ import prisma from "../../../shared/prisma";
 
 const createSpecialties = async (req: Request) => {
     const file = req.file as IFile;
+
     if (file) {
         const uploadToCloudinary = await fileUploader.uploadToClodinary(file);
         req.body.icon = uploadToCloudinary?.secure_url
