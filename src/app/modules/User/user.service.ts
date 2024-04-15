@@ -8,6 +8,7 @@ import { IPaginationOptions } from "../../interface/pagination";
 import { paginationHelper } from "../../../hepers/paginationHelpers";
 import { userSearchableFields } from "./user.const";
 import { JwtHeader, JwtPayload } from "jsonwebtoken";
+import { IAuthUser } from "../../interface/common";
 
 const createAdmin = async (req: Request) => {
     // console.log({file:req.file,body:req.body.data});
@@ -184,10 +185,10 @@ return updateUserStatus
 }
 
 
-const getMyProfile = async(user:JwtPayload)=>{
+const getMyProfile = async(user:IAuthUser)=>{
 const userData = await prisma.user.findUniqueOrThrow({
     where:{
-        email:user.email,
+        email:user?.email,
         status:UserStatus.ACTIVE
     },
     select:{
@@ -242,13 +243,13 @@ return  {...userData,...profileInfo};
 
 
 
-const updateMyProfile = async(user:JwtPayload,req:Request)=>{
+const updateMyProfile = async(user:IAuthUser,req:Request)=>{
    const updatedDate = req.body;
 
 
     const userData = await prisma.user.findUniqueOrThrow({
         where:{
-            email:user.email,
+            email:user?.email,
             status:UserStatus.ACTIVE
         }
     })

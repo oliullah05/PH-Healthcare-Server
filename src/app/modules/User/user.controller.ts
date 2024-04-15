@@ -5,6 +5,7 @@ import pick from "../../../shared/pick";
 import { userFilterableFields } from "./user.const";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
+import { IAuthUser } from "../../interface/common";
 
 const createAdmin = async (req: Request, res: Response) => {
 
@@ -59,7 +60,7 @@ const changeProfileStatus = catchAsync(async (req, res) => {
 
 const getMyProfile = catchAsync(async (req, res) => {
 
-    const user = req.user;
+    const user = req.user as IAuthUser;
     const result = await userService.getMyProfile(user);
     sendResponse(res, {
         success: true,
@@ -71,9 +72,8 @@ const getMyProfile = catchAsync(async (req, res) => {
 
 })
 const updateMyProfile = catchAsync(async (req, res) => {
-console.log(req.file);
-    const user = req.user;
-    const result = await userService.updateMyProfile(user,req);
+    const user = req.user as IAuthUser;
+    const result = await userService.updateMyProfile(user, req);
     sendResponse(res, {
         success: true,
         message: "User updated successfully",
