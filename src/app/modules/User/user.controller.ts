@@ -70,6 +70,19 @@ const getMyProfile = catchAsync(async (req, res) => {
     })
 
 })
+const updateMyProfile = catchAsync(async (req, res) => {
+
+    const user = req.user;
+    const result = await userService.updateMyProfile(user,req.body);
+    sendResponse(res, {
+        success: true,
+        message: "User updated successfully",
+        statusCode: httpStatus.OK,
+        // meta: result.meta,
+        data: result
+    })
+
+})
 
 
 
@@ -79,6 +92,7 @@ export const userController = {
     createDoctor,
     changeProfileStatus,
     getAllUser,
-    getMyProfile
+    getMyProfile,
+    updateMyProfile
 
 }

@@ -34,6 +34,19 @@ router.post("/create-doctor", auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   }, userController.createDoctor
 )
 
+
+router.patch("/update-my-profile",auth(UserRole.SUPER_ADMIN,UserRole.ADMIN,UserRole.DOCTOR,UserRole.PATIENT),
+  fileUploader.upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    // req.body = userValidation.createDoctor.parse(JSON.parse(req.body.data))
+    req.body = JSON.parse(req.body.data)
+   
+    next()
+  },
+  
+  userController.updateMyProfile
+)
+
 export const userRoutes = router;
 
 
