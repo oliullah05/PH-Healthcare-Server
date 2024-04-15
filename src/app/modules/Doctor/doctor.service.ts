@@ -35,6 +35,7 @@ const result =await  prisma.$transaction(async(transactionClient)=>{
         })
     }
 
+    
 
 const doctorSpecialitiesCreateData= createSpacialtiesIds.map((specialties)=>{
     return {
