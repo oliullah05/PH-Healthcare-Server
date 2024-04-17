@@ -1,5 +1,6 @@
 import express from 'express';
 import { PatientController } from './patient.controller';
+import auth from '../../middlewars/auth';
 
 const router = express.Router();
 
@@ -9,13 +10,18 @@ router.get(
 );
 
 router.get(
-    '/:id',
+    '/:id',auth(),
     PatientController.getByIdFromDB
 );
 
 router.patch(
-    '/:id',
+    '/:id',auth(),
     PatientController.updateIntoDB
+);
+
+router.delete(
+    '/:id', auth(),
+    PatientController.deleteFromDB
 );
 
 
