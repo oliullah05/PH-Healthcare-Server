@@ -143,7 +143,7 @@ const updateIntoDB = async (id: string, payload: Partial<IPatientUpdate>): Promi
 
 
 const deleteFromDB = async (id: string) => {
-    await prisma.patient.findUniqueOrThrow({
+  const patientInfo =  await prisma.patient.findUniqueOrThrow({
         where:{
             id
         }
@@ -163,6 +163,16 @@ const deleteFromDB = async (id: string) => {
             }
         })
 
+    // delete user
+    await tx.user.delete({
+        where: {
+            email: patientInfo.email
+        }
+    })
+
+
+
+
         // delete patient
         const deletedPatient = await tx.patient.delete({
             where: {
@@ -170,12 +180,7 @@ const deleteFromDB = async (id: string) => {
             }
         })
       
-        // delete user
-        await tx.user.delete({
-            where: {
-                email: deletedPatient.email
-            }
-        })
+    
 
         return deletedPatient
     })
