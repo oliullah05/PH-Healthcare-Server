@@ -114,6 +114,12 @@ model DoctorSpecialties {
   @@map("doctor_specialties")
 }
 
+
+
+
+
+
+
 enum Gender {
   MALE
   FEMALE
