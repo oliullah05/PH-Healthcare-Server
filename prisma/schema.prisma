@@ -165,7 +165,7 @@ enum MaritalStatus {
 
 model MedicalReport {
   id         String   @id @default(uuid())
-  patientId  String
+  patientId  String 
   patient    Patient  @relation(fields: [patientId], references: [id])
   reportName String
   reportLink String
