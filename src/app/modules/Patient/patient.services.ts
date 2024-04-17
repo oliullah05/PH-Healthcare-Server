@@ -1,6 +1,6 @@
 import { Patient, Prisma, UserStatus } from '@prisma/client';
 import prisma from '../../../shared/prisma';
-import { IPatientFilterRequest, IPatientUpdate } from './patient.interface';
+import { IPatientFilterRequest, IPatientUpdate} from './patient.interface';
 
 import { patientSearchableFields } from './patient.constants';
 import { paginationHelper } from '../../../hepers/paginationHelpers';
@@ -87,7 +87,7 @@ const getByIdFromDB = async (id: string): Promise<Patient | null> => {
     return result;
 };
 
-const updateIntoDB = async (id: string, payload: any) => {
+const updateIntoDB = async (id: string, payload: Partial<IPatientUpdate>):Promise<Patient|null> => {
 
     const { patientHealthData, medicalReport, ...patientData } = payload;
     // console.log({patientHealthData,medicalReport,patientData});
@@ -126,7 +126,7 @@ const updateIntoDB = async (id: string, payload: any) => {
                 data: { ...medicalReport, patientId: patientInfo.id }
             })
         }
-        const responseResult = await prisma.patient.findUnique({
+        const responseResult = await transactionClient.patient.findUnique({
             where: {
                 id: patientInfo.id
             },
